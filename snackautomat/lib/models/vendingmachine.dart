@@ -2,6 +2,8 @@ import 'package:snackautomat/models/coinstorage.dart';
 import 'package:snackautomat/models/slot.dart';
 
 class VendingMachine {
+  static const Set<int> acceptedCoinValues = {1, 2, 5, 10, 20, 50, 100, 200};
+
   final List<Slot> slots;
   Slot? selectedSlot;
   final Map<int, int> currentBalance;
@@ -27,11 +29,23 @@ class VendingMachine {
     return false;
   }
 
+  bool insertCoin(int coinValue) {
+    if (!acceptedCoinValues.contains(coinValue)) {
+      return false;
+    }
+
+    currentBalance[coinValue] = (currentBalance[coinValue] ?? 0) + 1;
+
+    return true;
+  }
+
   int calculateCurrentBalance() {
     int sum = 0;
+
     currentBalance.forEach((coinValue, amount) {
       sum += coinValue * amount;
     });
+
     return sum;
   }
 
@@ -47,9 +61,11 @@ class VendingMachine {
     if (selectedSlot == null) {
       return false;
     }
+
     if (selectedSlot!.bestand <= 0) {
       return false;
     }
+
     return calculateCurrentBalance() >= selectedSlot!.product.priceInCent;
   }
 
@@ -66,10 +82,6 @@ class VendingMachine {
     return true;
   }
 
-  void insertCoin(int coinValue) {
-    currentBalance[coinValue] = (currentBalance[coinValue] ?? 0) + 1;
-  }
-
   Map<int, int> returnInsertedCoins() {
     final returnedCoins = Map<int, int>.from(currentBalance);
 
@@ -79,9 +91,3 @@ class VendingMachine {
     return returnedCoins;
   }
 }
-
-//Summe startet bei 0.
-//Automat geht jede Münzart durch.
-//Pro Münzart: Münzwert × Anzahl.
-//Ergebnis wird zur Summe addiert.
-//Am Ende kommt die Summe raus.

@@ -13,6 +13,14 @@ class VendingMachine {
     required this.currentBalance,
     required this.coinStorage,
   });
+
+  int calculateCurrentBalance() {
+    int sum = 0;
+    currentBalance.forEach((coinValue, amount) {
+      sum += coinValue * amount;
+    });
+    return sum;
+  }
 }
 
 

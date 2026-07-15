@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:snackautomat/widgets/product_card.dart';
 
 void main() {
   runApp(const MyApp());
